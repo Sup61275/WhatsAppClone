@@ -25,5 +25,6 @@
         android:layout_height="wrap_content"
         android:text="SEND VERIFICATION CODE"
         android:id="@+id/button"
+        android:background="@drawable/shape"
 />
 </LinearLayout>
