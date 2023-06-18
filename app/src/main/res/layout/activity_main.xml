@@ -8,23 +8,5 @@
     tools:context=".MainActivity"
     android:orientation="vertical">
 
-   <EditText
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="Enter Phone Number"
-       android:textSize="22dp"
-       android:id="@+id/phoneNumber"/>
-    <EditText
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="Enter Code"
-        android:textSize="22dp"
-           android:id="@+id/code"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SEND VERIFICATION CODE"
-        android:id="@+id/button"
-        android:background="@drawable/shape"
-/>
+
 </LinearLayout>
