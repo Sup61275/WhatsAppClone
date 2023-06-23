@@ -26,5 +26,13 @@
 
     <color name="grayBackground">#BCBCBC</color> <color name="chatbackground">#AAAAAA</color >
 
+
+        <color name="whatsapp_primary">#075E54</color>
+        <color name="whatsapp_primary_dark">#054E44</color>
+        <color name="whatsapp_accent">#25D366</color>
+        <color name="whatsapp_background">#FFFFFF</color>
+
+
+
 </resources>
 

@@ -3,6 +3,12 @@
     <style name="Base.Theme.WhatsAppClone" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <item name="colorPrimary">@color/whatsapp_primary</item> <!-- Set the primary color -->
+        <item name="colorPrimaryDark">@color/whatsapp_primary_dark</item> <!-- Set the primary dark color -->
+        <item name="colorAccent">@color/whatsapp_accent</item> <!-- Set the accent color -->
+        <item name="android:windowBackground">@color/whatsapp_background</item> <!-- Set the window background color -->
+
     </style>
 
     <style name="Theme.WhatsAppClone" parent="Base.Theme.WhatsAppClone" />
