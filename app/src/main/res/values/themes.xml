@@ -9,6 +9,9 @@
         <item name="colorAccent">@color/whatsapp_accent</item> <!-- Set the accent color -->
         <item name="android:windowBackground">@color/whatsapp_background</item> <!-- Set the window background color -->
 
+
+
+
     </style>
 
     <style name="Theme.WhatsAppClone" parent="Base.Theme.WhatsAppClone" />

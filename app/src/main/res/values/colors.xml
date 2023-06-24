@@ -32,6 +32,11 @@
         <color name="whatsapp_accent">#25D366</color>
         <color name="whatsapp_background">#FFFFFF</color>
 
+        <color name="whatsapp_green">#25D366</color>
+        <!-- Other color resources -->
+
+
+
 
 
 </resources>

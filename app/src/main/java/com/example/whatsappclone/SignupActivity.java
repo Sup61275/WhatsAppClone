@@ -42,9 +42,9 @@ public class SignupActivity extends AppCompatActivity {
         binding.SignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = binding.textusername.getText().toString().trim();
-                String email = binding.textemail.getText().toString().trim();
-                String password = binding.textpassword.getText().toString().trim();
+                String username = binding.textusernamee.getText().toString().trim();
+                String email = binding.textemaill.getText().toString().trim();
+                String password = binding.textpasswordd.getText().toString().trim();
 
                 if (!username.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
                     progressDialog.show();

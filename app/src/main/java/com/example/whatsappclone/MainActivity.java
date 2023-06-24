@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         auth = FirebaseAuth.getInstance();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -31,54 +32,35 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        final int SETTINGS_MENU_ID = 1;
-        final int GROUP_CHAT_MENU_ID = 2;
-        final int STARRED_MESSAGE_MENU_ID = 3;
-        final int LOGOUT_MENU_ID = 4;
 
-        switch (itemId) {
-            case SETTINGS_MENU_ID:
-                // Handle the "Settings" menu item click
-                openSettingsActivity();
-                return true;
-            case GROUP_CHAT_MENU_ID:
-                // Handle the "Group Chat" menu item click
-                openGroupChatActivity();
-                return true;
-            case STARRED_MESSAGE_MENU_ID:
-                // Handle the "Starred Message" menu item click
-                openStarredMessageActivity();
-                return true;
-            case LOGOUT_MENU_ID:
-                // Handle the "Logout" menu item click
-                logoutUser();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (itemId == R.id.settings) {
+            // Handle the "Settings" menu item click
+            Toast.makeText(this, "Settings is clicked", Toast.LENGTH_SHORT).show();
+        } else if (itemId == R.id.group_chat) {
+            // Handle the "Group Chat" menu item click
+            Toast.makeText(this, "Group Chat is Clicked", Toast.LENGTH_SHORT).show();
+        } else if (itemId == R.id.starred_message) {
+            // Handle the "Starred Message" menu item click
+            Toast.makeText(this, "Starred Message is Clicked", Toast.LENGTH_SHORT).show();
+        } else if (itemId == R.id.logout) {
+            // Handle the "Logout" menu item click
+            auth.signOut();
+            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+            startActivity(intent);
+            finish(); // Close the main activity
+            Toast.makeText(this, "Logout successful", Toast.LENGTH_SHORT).show();
         }
-    }
 
-    private void logoutUser() {
-        auth.signOut();
-        Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-        startActivity(intent);
-        finish(); // Close the main activity
-        Toast.makeText(this, "Logout successful", Toast.LENGTH_SHORT).show();
-    }
-
-    private void openSettingsActivity() {
-        // Implement the logic to open the Settings activity
-    }
-
-    private void openGroupChatActivity() {
-        // Implement the logic to open the Group Chat activity
-    }
-
-    private void openStarredMessageActivity() {
-        // Implement the logic to open the Starred Message activity
+        return super.onOptionsItemSelected(item);
     }
 
 }
+
+
+
+
+
