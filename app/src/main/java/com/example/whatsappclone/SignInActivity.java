@@ -6,11 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.whatsappclone.databinding.ActivitySignInBinding;
+import com.google.android.gms.auth.api.identity.SignInCredential;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -30,6 +32,7 @@ public class SignInActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient googleSignInClient;
+    private static final String TAG = "SignInActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,32 +112,41 @@ public class SignInActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
-            // Google SignIn result
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                // Google SignIn was successful, authenticate with Firebase
+                // Google Sign-In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                // Google SignIn failed
-                Toast.makeText(this, "Google SignIn failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                // Google Sign-In failed
+                Log.w(TAG, "Google sign-in failed", e);
+                Toast.makeText(SignInActivity.this, "Google sign-in failed", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        progressDialog.setTitle("Google Sign-In");
+        progressDialog.setMessage("Please wait, validating...");
+
+        progressDialog.show();
+
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressDialog.dismiss();
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            // Proceed with your desired logic
+                            updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(SignInActivity.this, "Authentication failed: " + task.getException(), Toast.LENGTH_SHORT).show();
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(SignInActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
+                            updateUI(null);
                         }
                     }
                 });
@@ -149,5 +161,14 @@ public class SignInActivity extends AppCompatActivity {
             finish(); // Close the sign-in activity
         }
     }
-}
 
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
+            // User is signed in, navigate to the main activity
+            startActivity(new Intent(SignInActivity.this, MainActivity.class));
+            finish(); // Close the sign-in activity
+        } else {
+            // User is signed out, stay on the sign-in activity
+        }
+    }
+}

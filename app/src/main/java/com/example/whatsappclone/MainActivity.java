@@ -1,12 +1,14 @@
 package com.example.whatsappclone;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.example.whatsappclone.databinding.ActivityMainBinding;
@@ -17,21 +19,25 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private FirebaseAuth auth;
 
+    private PopupWindow popupWindow;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         auth = FirebaseAuth.getInstance();
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -55,9 +61,12 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Logout successful", Toast.LENGTH_SHORT).show();
         }
 
+        if (popupWindow != null && popupWindow.isShowing()) {
+            popupWindow.dismiss(); // Dismiss the PopupWindow if it is showing
+        }
+
         return super.onOptionsItemSelected(item);
     }
-
 }
 
 
