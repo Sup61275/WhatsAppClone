@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             auth.signOut();
             Intent intent = new Intent(MainActivity.this, SignInActivity.class);
             startActivity(intent);
-            finish(); // Close the main activity
+            // Close the main activity
             Toast.makeText(this, "Logout successful", Toast.LENGTH_SHORT).show();
         }
 
