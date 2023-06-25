@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.whatsappclone.Models.User;
 import com.example.whatsappclone.databinding.ActivitySignInBinding;
 import com.google.android.gms.auth.api.identity.SignInCredential;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -25,6 +26,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignInActivity extends AppCompatActivity {
     private ActivitySignInBinding binding;
@@ -33,6 +36,7 @@ public class SignInActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient googleSignInClient;
     private static final String TAG = "SignInActivity";
+    private FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,9 @@ public class SignInActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Login");
         progressDialog.setMessage("Please wait, validating...");
+
+        // Initialize Firebase Realtime Database
+        database = FirebaseDatabase.getInstance();
 
         // Initialize Google SignIn options
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -141,6 +148,17 @@ public class SignInActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            if (user != null) {
+                                // Create a new user object with Firebase User information
+                                User users = new User();
+                                users.setUserid(user.getUid());
+                                users.setUserName(user.getDisplayName());
+                                users.setProfilePic(user.getPhotoUrl().toString());
+
+                                // Store the user data in the Firebase Realtime Database
+                                DatabaseReference usersRef = database.getReference("Users");
+                                usersRef.child(user.getUid()).setValue(users);
+                            }
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -172,3 +190,4 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 }
+

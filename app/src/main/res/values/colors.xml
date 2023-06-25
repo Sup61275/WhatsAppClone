@@ -35,6 +35,15 @@
         <color name="whatsapp_green">#25D366</color>
         <!-- Other color resources -->
 
+        <color name="color_Primary">#3F51B5</color> <!-- Change the color value to your desired primary color -->
+        <color name="white_">#FFFFFF</color>
+        <color name="tabSelectedColor">#FFFFFF</color> <!-- Color for selected tab text -->
+        <color name="tabUnselectedColor">#A0FFFFFF</color> <!-- Color for unselected tab text -->
+        <color name="chatStatusColor">#4CAF50</color> <!-- Color for chat status -->
+        <color name="callColor">#FF9800</color> <!-- Color for call -->
+
+
+
 
 
 
