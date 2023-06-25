@@ -6,7 +6,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <!-- Other theme attributes -->
+
+
+
     </style>
+
 
 
 

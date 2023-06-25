@@ -18,7 +18,8 @@
             android:elevation="6dp"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:title="WhatsApp"
-            app:titleTextColor="@color/white" />
+            app:titleTextColor="@color/white"
+            />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
