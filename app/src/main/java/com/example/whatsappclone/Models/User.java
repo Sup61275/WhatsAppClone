@@ -13,6 +13,9 @@ public class User {
     public User(String username, String email, boolean b, String userId) {
         // Default constructor required for Firebase Realtime Database
     }
+    public User() {
+        // Default constructor required for Firebase Realtime Database
+    }
 
     public User(String profilePic, String userName, String mail, String password, String userid, String lastMessage, String status, boolean readStatus) {
         this.profilePic = profilePic;

@@ -63,9 +63,9 @@ public class SignupActivity extends AppCompatActivity {
                                         String profilePic = ""; // Add the profile picture URL here
                                         String lastMessage = ""; // Add the last message here
 
-                                        User users = new User(profilePic, username, email, password, userId, lastMessage, "", false);
+                                        User user = new User(profilePic, username, email, password, userId, lastMessage, "", false);
 
-                                        usersRef.child(userId).setValue(users, new DatabaseReference.CompletionListener() {
+                                        usersRef.child(userId).setValue(user, new DatabaseReference.CompletionListener() {
                                             @Override
                                             public void onComplete(@NonNull DatabaseError error, @NonNull DatabaseReference ref) {
                                                 if (error == null) {
