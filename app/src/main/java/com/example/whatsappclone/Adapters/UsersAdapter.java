@@ -23,20 +23,18 @@ import java.util.ArrayList;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
 
-    ArrayList<User>list;
+    ArrayList<User> list;
+    Context context;
 
     public UsersAdapter(ArrayList<User> list, Context context) {
         this.list = list;
         this.context = context;
     }
 
-    Context context;
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        View view = LayoutInflater.from(context).inflate((R.layout.users_show),parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.users_show, parent, false);
         return new ViewHolder(view);
     }
 
@@ -44,6 +42,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User user = list.get(position);
+
         // Populate the user profile image
         Glide.with(context)
                 .load(user.getProfilePic())
@@ -51,45 +50,19 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
                 .into(holder.profileImage);
 
         // Set the user name
-        holder.UserName.setText(user.getUserName());
+        holder.userName.setText(user.getUserName());
 
-        // Retrieve the last message and its read status from Firebase
-        DatabaseReference lastMessageRef = FirebaseDatabase.getInstance().getReference()
-                .child("lastMessages")
-                .child(user.getUserid());
+        // Set the last message
+        holder.lastMessage.setText(user.getLastMessage());
 
-        lastMessageRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    String lastMessage = snapshot.child("message").getValue(String.class);
-                    boolean isRead = snapshot.child("isRead").getValue(Boolean.class);
-
-                    // Set the last message text
-                    holder.LastMessage.setText(lastMessage);
-
-                    // Set the tick icon based on the read status
-                    if (isRead) {
-                        holder.TickImage.setImageResource(R.drawable.blue_tick);
-                    } else {
-                        holder.TickImage.setImageResource(R.drawable.grey_tick);
-                    }
-                } else {
-                    // If no last message exists, set appropriate defaults
-                    holder.LastMessage.setText("");
-                    holder.TickImage.setImageResource(R.drawable.grey_tick);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Handle onCancelled if needed
-            }
-        });
-
-        // Set the last message date (you need to retrieve it from Firebase as well)
-        holder.Time.setText("");
+        // Set the tick icon based on the read status
+        if (user.isReadStatus()) {
+            holder.tickImage.setImageResource(R.drawable.blue_tick);
+        } else {
+            holder.tickImage.setImageResource(R.drawable.grey_tick);
+        }
     }
+
 
 
     @Override
@@ -98,17 +71,15 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        ImageView profileImage,TickImage;
-        TextView LastMessage,UserName,Time;
+        ImageView profileImage, tickImage;
+        TextView userName, lastMessage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            profileImage=itemView.findViewById(R.id.profile_image);
-            TickImage=itemView.findViewById(R.id.lastMessageTickIcon);
-            LastMessage=itemView.findViewById(R.id.lastMessage);
-            UserName=itemView.findViewById(R.id.userNameList);
-            Time=itemView.findViewById(R.id.LastMessageDate);
+            profileImage = itemView.findViewById(R.id.profile_image);
+            tickImage = itemView.findViewById(R.id.lastMessageTickIcon);
+            userName = itemView.findViewById(R.id.userNameList);
+            lastMessage = itemView.findViewById(R.id.lastMessage);
         }
     }
 }

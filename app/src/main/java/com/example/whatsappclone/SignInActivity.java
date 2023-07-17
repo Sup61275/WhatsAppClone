@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.example.whatsappclone.Models.User;
 import com.example.whatsappclone.databinding.ActivitySignInBinding;
-import com.google.android.gms.auth.api.identity.SignInCredential;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -26,6 +25,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -150,14 +150,28 @@ public class SignInActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user != null) {
                                 // Create a new user object with Firebase User information
-                                User users = new User();
-                                users.setUserid(user.getUid());
-                                users.setUserName(user.getDisplayName());
-                                users.setProfilePic(user.getPhotoUrl().toString());
+                                String userId = user.getUid();
+                                String username = user.getDisplayName();
+                                String email = user.getEmail();
+                                String profilePic = user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : "";
+                                User users = new User(username, email, false, userId);
+                                users.setProfilePic(profilePic);
 
                                 // Store the user data in the Firebase Realtime Database
                                 DatabaseReference usersRef = database.getReference("Users");
-                                usersRef.child(user.getUid()).setValue(users);
+                                usersRef.child(userId).setValue(users, new DatabaseReference.CompletionListener() {
+                                    @Override
+                                    public void onComplete(@NonNull DatabaseError error, @NonNull DatabaseReference ref) {
+                                        if (error == null) {
+                                            Toast.makeText(SignInActivity.this, "Account created successfully", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                                            startActivity(intent);
+                                            finish(); // Close the sign-in activity
+                                        } else {
+                                            Toast.makeText(SignInActivity.this, "Failed to create account", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
                             }
                             updateUI(user);
                         } else {

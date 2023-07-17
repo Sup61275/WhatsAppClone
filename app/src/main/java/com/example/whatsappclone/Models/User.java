@@ -1,14 +1,20 @@
 package com.example.whatsappclone.Models;
 
 public class User {
-    private String profilePic, userName,mail,password,userid,lastMessage,status;
+    private String profilePic;
+    private String userName;
+    private String mail;
+    private String password;
+    private String userid;
+    private String lastMessage;
+    private String status;
+    private boolean readStatus;
 
-
-    public User() {
+    public User(String username, String email, boolean b, String userId) {
         // Default constructor required for Firebase Realtime Database
     }
 
-    public User(String profilePic, String userName, String mail, String password, String userid, String lastMessage, String status) {
+    public User(String profilePic, String userName, String mail, String password, String userid, String lastMessage, String status, boolean readStatus) {
         this.profilePic = profilePic;
         this.userName = userName;
         this.mail = mail;
@@ -16,12 +22,7 @@ public class User {
         this.userid = userid;
         this.lastMessage = lastMessage;
         this.status = status;
-    }
-
-    public User(String mail, String password, String userid) {
-        this.mail = mail;
-        this.password = password;
-        this.userid = userid;
+        this.readStatus = readStatus;
     }
 
     public String getProfilePic() {
@@ -79,6 +80,15 @@ public class User {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public boolean isReadStatus() {
+        return readStatus;
+    }
+
+    public void setReadStatus(boolean readStatus) {
+        this.readStatus = readStatus;
+    }
 }
+
 
 

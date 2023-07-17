@@ -15,13 +15,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SignupActivity extends AppCompatActivity {
+
     private ActivitySignupBinding binding;
     private ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
-    private FirebaseDatabase database;
+    private DatabaseReference usersRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +37,8 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         mAuth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
+        usersRef = FirebaseDatabase.getInstance().getReference("Users");
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Creating Account");
         progressDialog.setMessage("We're creating your account");
@@ -56,21 +60,24 @@ public class SignupActivity extends AppCompatActivity {
                                     progressDialog.dismiss();
                                     if (task.isSuccessful()) {
                                         String userId = mAuth.getCurrentUser().getUid();
-                                        User user = new User(username, email, password);
-                                        database.getReference("Users").child(userId).setValue(user)
-                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            Toast.makeText(SignupActivity.this, "Account created successfully", Toast.LENGTH_SHORT).show();
-                                                            Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-                                                            startActivity(intent);
-                                                            finish(); // Close the sign-up activity
-                                                        } else {
-                                                            Toast.makeText(SignupActivity.this, "Failed to create account", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    }
-                                                });
+                                        String profilePic = ""; // Add the profile picture URL here
+                                        String lastMessage = ""; // Add the last message here
+
+                                        User users = new User(profilePic, username, email, password, userId, lastMessage, "", false);
+
+                                        usersRef.child(userId).setValue(users, new DatabaseReference.CompletionListener() {
+                                            @Override
+                                            public void onComplete(@NonNull DatabaseError error, @NonNull DatabaseReference ref) {
+                                                if (error == null) {
+                                                    Toast.makeText(SignupActivity.this, "Account created successfully", Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                                                    startActivity(intent);
+                                                    finish(); // Close the sign-up activity
+                                                } else {
+                                                    Toast.makeText(SignupActivity.this, "Failed to create account", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                     } else {
                                         Toast.makeText(SignupActivity.this, "Failed to create account", Toast.LENGTH_SHORT).show();
                                     }
@@ -91,3 +98,5 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 }
+
+

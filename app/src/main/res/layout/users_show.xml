@@ -6,8 +6,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:layout_marginLeft="5dp"
         android:src="@drawable/avatar3" />
 
@@ -27,15 +27,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
+                android:layout_marginTop="4dp"
+                android:layout_marginLeft="5dp"
                 android:text="User Name"
                 android:textColor="@color/black"
-                android:textSize="19dp"
+                android:textSize="32px"
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/LastMessageDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_marginTop="4dp"
                 android:text="Last Message Date"
                 android:textSize="14dp" />
 
