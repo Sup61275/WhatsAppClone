@@ -40,7 +40,9 @@
         <color name="tabSelectedColor">#FFFFFF</color> <!-- Color for selected tab text -->
         <color name="tabUnselectedColor">#A0FFFFFF</color> <!-- Color for unselected tab text -->
         <color name="chatStatusColor">#4CAF50</color> <!-- Color for chat status -->
-        <color name="callColor">#FF9800</color> <!-- Color for call -->
+        <color name="callColor">#FF9800</color>
+    <color name="callColor1">#E8E4DD</color> <!-- Color for call -->
+    <!-- Color for call -->
 
 
 
