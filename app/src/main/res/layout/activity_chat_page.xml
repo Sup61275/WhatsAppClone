@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".chatPage"
     android:background="@drawable/w2">
-    
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,7 +23,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/sendmessage"
+            android:id="@+id/sendmessage1"
             android:background="@drawable/enter_message_design"
             android:layout_weight="1"
             android:ems="10"
@@ -33,7 +33,7 @@
             android:inputType="textPersonName"
             android:padding="13dp"/>
         <ImageView
-            android:id="@id/sendmessage"
+            android:id="@+id/sendmessage"
             android:layout_width="50dp"
             android:layout_height="50dp"
             app:srcCompat="@drawable/send"
@@ -41,96 +41,87 @@
             android:layout_marginLeft="4dp"
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"
-            android:layout_weight="0"
-            />
+            android:layout_weight="0"/>
     </LinearLayout>
 
-        <androidx.appcompat.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"
+        android:background="@color/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/toolbar"
-            android:background="@color/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            >
+            android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.Constraints
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/backarrow"
-                    app:layout_constrainBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.476"
-                    app:srcCompat="@drawable/leftarrowwhite"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/backarrow"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/leftarrowwhite"/>
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:id="@+id/profile_image"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:padding="5dp"
-                    android:src="@drawable/avatar3"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/backarrow"
-                    app:layout_constarintTop_toTopOf="parent"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/user_name"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:text="Username"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/profile_image"
-                    app:layout_constraintTop_toTopOf="parent"/>
-                <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:id="@+id/profile_image"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:padding="5dp"
+                android:src="@drawable/avatar3"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/backarrow"
+                app:layout_constraintTop_toTopOf="parent"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/user_name"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:text="Username"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/profile_image"
+                app:layout_constraintTop_toTopOf="parent"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView4"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/imageView5"
+                app:srcCompat="@drawable/call"
+                app:layout_constraintTop_toTopOf="parent"/>
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imageView4"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginRight="15dp"
-                    app:layout_constraintBottom_toBottom0f="parent"
-                    app:layout_constraintEnd_toStartOf="@id/imageView5"
-                    app:srcCompat="@drawable/call"
-                    app:layout_constraintTop_toTopOf="parent"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/imageView6"
+                android:id="@+id/imageView5"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/videocall"/>
 
-                <ImageView
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView6"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/menu"/>
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottom0f="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/imageView6"
-                    android:id="@+id/imageView5"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginRight="15dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/videocall"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imageView6"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginRight="15dp"
-                    app:layout_constraintBottom_toBottom0f="parent"
-                    app:layout_constraintEnd_toEnd0f="parent"
-                    app:layout_constraintTop_toTop0f="parent"
-                    app:srcCompat="@drawable/menu"/>
-
-
-
-
-            </androidx.constraintlayout.widget.Constraints>
-                
-        </androidx.appcompat.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
 </RelativeLayout>

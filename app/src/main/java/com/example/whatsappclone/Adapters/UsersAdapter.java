@@ -1,6 +1,7 @@
 package com.example.whatsappclone.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.whatsappclone.Models.User;
 import com.example.whatsappclone.R;
+import com.example.whatsappclone.chatPage;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,6 +56,14 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
 
         // Set the last message
         holder.lastMessage.setText(user.getLastMessage());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(context, chatPage.class);
+                context.startActivity(intent);
+            }
+        });
 
         // Set the tick icon based on the read status
         if (user.isReadStatus()) {
