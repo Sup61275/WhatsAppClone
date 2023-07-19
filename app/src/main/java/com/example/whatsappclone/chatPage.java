@@ -2,7 +2,9 @@ package com.example.whatsappclone;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.example.whatsappclone.databinding.ActivityChatPageBinding;
@@ -34,5 +36,15 @@ public class chatPage extends AppCompatActivity {
                 .load(profilePic)
                 .placeholder(R.drawable.avatar3) // Placeholder image while loading the profilePic
                 .into(binding.profileImage);
+
+
+        binding.backarrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(chatPage.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
 }
