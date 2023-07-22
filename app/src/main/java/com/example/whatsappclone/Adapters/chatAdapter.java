@@ -21,6 +21,13 @@ public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context context;
     int SENDER_VIEW_TYPE = 1;
     int RECEIVER_VIEW_TYPE = 2;
+    String recId;
+
+    public chatAdapter(ArrayList<Message> messages, Context context, String recieveId) {
+        this.messages = messages;
+        this.context = context;
+        this.recId = recieveId;
+    }
 
     public chatAdapter(ArrayList<Message> messages, Context context) {
         this.messages = messages;
