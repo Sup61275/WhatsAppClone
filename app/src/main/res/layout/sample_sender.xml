@@ -36,6 +36,8 @@
             android:maxWidth="270dp"
             android:minWidth="50dp"
             android:text="Messages"
+            android:textColor="@color/black"
+            android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/senderTime"
             app:layout_constraintEnd_toStartOf="@id/guideline2"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +52,8 @@
             android:layout_marginRight="4dp"
             android:layout_marginBottom="4dp"
             android:text="12:00"
-            android:textSize="10sp"
+            android:textSize="11sp"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guideline2" />
 
