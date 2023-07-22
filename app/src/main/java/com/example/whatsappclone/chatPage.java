@@ -48,7 +48,6 @@ public class chatPage extends AppCompatActivity {
                 .placeholder(R.drawable.avatar3) // Placeholder image while loading the profilePic
                 .into(binding.profileImage);
 
-
         binding.backarrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,65 +55,55 @@ public class chatPage extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        final ArrayList<Message> message = new ArrayList<>();
-        final chatAdapter chatAdapter = new chatAdapter(message, this, receiveId);
+
+        final ArrayList<Message> messages = new ArrayList<>();
+        final chatAdapter chatAdapter = new chatAdapter(messages, this, receiveId);
 
         binding.chatRecyclerView.setAdapter(chatAdapter);
 
-        LinearLayoutManager LayoutManager = new LinearLayoutManager(this);
-        binding.chatRecyclerView.setLayoutManager(LayoutManager);
-
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        binding.chatRecyclerView.setLayoutManager(layoutManager);
 
         final String senderRoom = senderId + receiveId;
         final String receiverRoom = receiveId + senderId;
 
-        database.getReference().child("chats")
-                        .child(senderRoom)
-                                .addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+        database.getReference().child("chats").child(senderRoom)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        messages.clear();
+                        for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                            Message model = snapshot1.getValue(Message.class);
+                            model.setMessageId(snapshot1.getKey());
+                            messages.add(model);
+                        }
+                        chatAdapter.notifyDataSetChanged();
+                    }
 
-                                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                    }
-                                });
+                    }
+                });
 
         binding.sendmessage.setOnClickListener(new View.OnClickListener() {
-
             @Override
-
             public void onClick(View v) {
-
                 String message = binding.sendmessage1.getText().toString();
-                final Message model = new Message(senderId, message);
+                if (!message.isEmpty()) {
+                    Message model = new Message(senderId, message);
+                    model.setTimestamp(new Date().getTime());
+                    binding.sendmessage1.setText("");
 
-                model.setTimestamp(new Date().getTime());
-
-                binding.sendmessage1.setText("");
-
-
-                database.getReference().child("chats")
-
-                        .child(senderRoom)
-
-                        .push()
-
-                        .setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
-
-                            @Override
-
-                            public void onSuccess(Void unused) {
-
-
-                            }
-
-                        });
+                    database.getReference().child("chats").child(senderRoom).push()
+                            .setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    // Message sent successfully
+                                }
+                            });
+                }
             }
         });
     }
-
 }
-

@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/recieverText"
         android:layout_margin="8dp"
-        android:inputType="textLongMessage|textMultiline"
+        android:inputType="text|textMultiLine"
         android:maxWidth="270dp"
         android:minWidth="50dp"
         android:text="TextView"
