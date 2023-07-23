@@ -14,8 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.whatsappclone.Models.Message;
 import com.example.whatsappclone.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -72,21 +75,34 @@ public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         .setPositiveButton("yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
+                                FirebaseDatabase database= FirebaseDatabase.getInstance();
+                                String senderRoom=FirebaseAuth.getInstance().getUid()+recId;
+                                database.getReference().child("chats").child(senderRoom)
+                                        .child(message.getMessageId())
+                                        .setValue(null);
                             }
                         }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
+                              dialog.dismiss();
                             }
-                        });
+                        }).show();
+                return false;
             }
         });
 
         if (holder.getItemViewType() == SENDER_VIEW_TYPE) {
             ((SenderViewHolder)holder).sendmssg.setText(message.getMessage());
+            Date date= new Date(message.getTimestamp());
+            SimpleDateFormat simpleDateFormat= new SimpleDateFormat("h:mm a");
+            String strDate = simpleDateFormat.format(date);
+            ((SenderViewHolder)holder).sendtime.setText(strDate.toString());
         } else {
             ((ReceiverViewHolder)holder).recievemssg.setText(message.getMessage());
+            Date date= new Date(message.getTimestamp());
+            SimpleDateFormat simpleDateFormat= new SimpleDateFormat("h:mm a");
+            String strDate = simpleDateFormat.format(date);
+            ((ReceiverViewHolder)holder).recievetime.setText(strDate.toString());
         }
     }
 
