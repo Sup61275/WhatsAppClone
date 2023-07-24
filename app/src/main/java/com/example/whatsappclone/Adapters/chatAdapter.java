@@ -27,11 +27,23 @@ public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     int SENDER_VIEW_TYPE = 1;
     int RECEIVER_VIEW_TYPE = 2;
     String recId;
+    String senderId;
+    String senderName;
 
-    public chatAdapter(ArrayList<Message> messages, Context context, String recieveId) {
+    public chatAdapter(ArrayList<Message> messages, Context context, String recieveId, String senderId, String senderName) {
         this.messages = messages;
         this.context = context;
         this.recId = recieveId;
+        this.senderId = senderId;
+        this.senderName = senderName;
+    }
+
+
+    public chatAdapter(ArrayList<Message> messages, String recId, String senderId, String senderName) {
+        this.messages = messages;
+        this.recId = recId;
+        this.senderId = senderId;
+        this.senderName = senderName;
     }
 
     public chatAdapter(ArrayList<Message> messages, Context context) {
@@ -53,7 +65,7 @@ public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        if (messages.get(position).getuId().equals(FirebaseAuth.getInstance().getUid())) {
+        if (messages.get(position).getuId().equals(senderId)) {
             return SENDER_VIEW_TYPE;
         } else {
             return RECEIVER_VIEW_TYPE;

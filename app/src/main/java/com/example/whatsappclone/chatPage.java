@@ -55,9 +55,14 @@ public class chatPage extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
         final ArrayList<Message> messages = new ArrayList<>();
-        final chatAdapter chatAdapter = new chatAdapter(messages, this, receiveId);
+        // Add this line after getting the receiveId
+        String senderName = auth.getCurrentUser().getDisplayName(); // or retrieve sender's name from wherever it's stored
+      final  chatAdapter chatAdapter = new chatAdapter(messages, this, receiveId, senderId, senderName);
+
+
+
+
 
         binding.chatRecyclerView.setAdapter(chatAdapter);
 
