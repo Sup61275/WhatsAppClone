@@ -10,7 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.bumptech.glide.module.AppGlideModule;
+
 import com.example.whatsappclone.Adapters.FragmentsAdapter;
 import com.example.whatsappclone.databinding.ActivityMainBinding;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,9 +36,7 @@ public class MainActivity extends AppCompatActivity {
         binding.tabLayout.setupWithViewPager(binding.viewPager);
     }
 
-    public class MyAppGlideModule extends AppGlideModule {
-        // Leave this class empty, Glide will automatically generate the necessary code.
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

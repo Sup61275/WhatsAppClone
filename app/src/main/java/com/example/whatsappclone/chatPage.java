@@ -14,6 +14,7 @@ import com.example.whatsappclone.Models.Message;
 import com.example.whatsappclone.databinding.ActivityChatPageBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -48,6 +49,22 @@ public class chatPage extends AppCompatActivity {
                 .placeholder(R.drawable.avatar3) // Placeholder image while loading the profilePic
                 .into(binding.profileImage);
 
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            // User is logged in, access the display name
+            String UserName = currentUser.getDisplayName();
+            // Use the user's display name as needed (e.g., to set the username in the UI)
+            binding.userName.setText(userName);
+        } else {
+            // User is not logged in, handle this case (e.g., redirect to login screen)
+            // For example, you can redirect the user to the login screen:
+            Intent loginIntent = new Intent(chatPage.this, SignInActivity.class);
+            startActivity(loginIntent);
+            finish(); // Finish the chatPage activity so that the user cannot go back to it without logging in
+        }
+
+
         binding.backarrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,10 +86,10 @@ public class chatPage extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         binding.chatRecyclerView.setLayoutManager(layoutManager);
 
-        final String senderRoom = senderId + receiveId;
-        final String receiverRoom = receiveId + senderId;
+        final String SenderRoom = senderId + receiveId;
+        final String recieverRoom = receiveId + senderId;
 
-        database.getReference().child("chats").child(senderRoom)
+        database.getReference().child("chats").child(SenderRoom)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -100,7 +117,7 @@ public class chatPage extends AppCompatActivity {
                     model.setTimestamp(new Date().getTime());
                     binding.sendmessage1.setText("");
 
-                    database.getReference().child("chats").child(senderRoom).push()
+                    database.getReference().child("chats").child(SenderRoom).push()
                             .setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
