@@ -105,9 +105,17 @@ public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         if (holder.getClass() == SenderViewHolder.class) {
             ((SenderViewHolder) holder).senderMsg.setText(message.getMessage());
+            Date date= new Date(message.getTimestamp());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("h:mm a");
+            String strDate = simpleDateFormat.format(date);
+            ((SenderViewHolder) holder).senderTime.setText(strDate.toString());
 
         } else {
             ((ReceiverViewHolder) holder).receiverMsg.setText(message.getMessage());
+            Date date= new Date(message.getTimestamp());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("h:mm a");
+            String strDate = simpleDateFormat.format(date);
+            ((ReceiverViewHolder) holder).receiverTime.setText(strDate.toString());
 
         }
     }
