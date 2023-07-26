@@ -21,6 +21,8 @@
         android:maxWidth="270dp"
         android:minWidth="50dp"
         android:text="TextView"
+        android:textSize="16sp"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/receiverTime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline2"

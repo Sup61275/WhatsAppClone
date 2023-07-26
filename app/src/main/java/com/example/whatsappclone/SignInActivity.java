@@ -30,13 +30,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SignInActivity extends AppCompatActivity {
-    private ActivitySignInBinding binding;
+   private ActivitySignInBinding binding;
     private ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
     private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient googleSignInClient;
     private static final String TAG = "SignInActivity";
-    private FirebaseDatabase database;
+     FirebaseDatabase firebaseDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +49,12 @@ public class SignInActivity extends AppCompatActivity {
         }
 
         mAuth = FirebaseAuth.getInstance();
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(SignInActivity.this);
         progressDialog.setTitle("Login");
         progressDialog.setMessage("Please wait, validating...");
 
         // Initialize Firebase Realtime Database
-        database = FirebaseDatabase.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
 
         // Initialize Google SignIn options
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -66,27 +66,28 @@ public class SignInActivity extends AppCompatActivity {
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // Set up Google SignIn button
-        Button googleSignInButton = binding.googlebtn;
+        Button googleSignInButton = binding.btnGoogle;
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // Launch Google SignIn intent
                 Intent signInIntent = googleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
 
-        binding.SignInButton.setOnClickListener(new View.OnClickListener() {
+        binding.btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = binding.textemail.getText().toString().trim();
-                String password = binding.textpassword.getText().toString().trim();
+                String email = binding.txtEmail.getText().toString().trim();
+                String password = binding.txtPassword.getText().toString().trim();
 
                 if (!email.isEmpty() && !password.isEmpty()) {
                     progressDialog.show();
 
                     mAuth.signInWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(SignInActivity.this, new OnCompleteListener<AuthResult>() {
+                            .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     progressDialog.dismiss();
@@ -95,7 +96,7 @@ public class SignInActivity extends AppCompatActivity {
                                         startActivity(intent);
                                         finish(); // Close the sign-in activity
                                     } else {
-                                        Toast.makeText(SignInActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SignInActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -105,7 +106,7 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-        binding.txtalreadyhaveacc.setOnClickListener(new View.OnClickListener() {
+        binding.txtClickSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SignInActivity.this, SignupActivity.class);
@@ -153,12 +154,13 @@ public class SignInActivity extends AppCompatActivity {
                                 String userId = user.getUid();
                                 String username = user.getDisplayName();
                                 String email = user.getEmail();
-                                String profilePic = user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : "";
-                                User users = new User(username, email, false, userId);
-                                users.setProfilePic(profilePic);
+
+                                User users = new User(username,email, userId);
+                                users.setUserName(user.getDisplayName());
+                                users.setProfilePic(user.getPhotoUrl().toString());
 
                                 // Store the user data in the Firebase Realtime Database
-                                DatabaseReference usersRef = database.getReference("Users");
+                                DatabaseReference usersRef =firebaseDatabase.getReference("Users");
                                 usersRef.child(userId).setValue(users, new DatabaseReference.CompletionListener() {
                                     @Override
                                     public void onComplete(@NonNull DatabaseError error, @NonNull DatabaseReference ref) {

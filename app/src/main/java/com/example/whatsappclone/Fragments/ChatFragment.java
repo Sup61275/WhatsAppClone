@@ -22,10 +22,10 @@ import java.util.ArrayList;
 public class ChatFragment extends Fragment {
 
     private FragmentChatBinding binding;
-    private ArrayList<User> list;
+    private ArrayList<User> list =new ArrayList<>();
     private UsersAdapter adapter;
-    private DatabaseReference lastMessageRef;
-    private DatabaseReference usersRef;
+    FirebaseDatabase database;
+
 
     public ChatFragment() {
         // Required empty public constructor
@@ -35,55 +35,29 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentChatBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
+        database=FirebaseDatabase.getInstance();
 
-        list = new ArrayList<>();
-        adapter = new UsersAdapter(list, getContext());
+
+
+       UsersAdapter adapter = new UsersAdapter(list, getContext());
         binding.chatRecyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         binding.chatRecyclerView.setLayoutManager(layoutManager);
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        lastMessageRef = database.getReference().child("lastMessages");
-        usersRef = database.getReference().child("Users");
-
-        usersRef.addValueEventListener(new ValueEventListener() {
+        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 list.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    User user = dataSnapshot.getValue(User.class);
-                    user.setUserid(dataSnapshot.getKey());
-                    if (!user.getUserid().equals(FirebaseAuth.getInstance().getUid())){
-                        list.add(user);
+                    User users = dataSnapshot.getValue(User.class);
+                    users.setUserId(dataSnapshot.getKey());
+                    if (!users.getUserId().equals(FirebaseAuth.getInstance().getUid())) {
+                        list.add(users);
+                    }
                 }
-                    lastMessageRef.child(user.getUserid()).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.exists()) {
-                                String lastMessage = snapshot.child("message").getValue(String.class);
-                                boolean isRead = snapshot.child("isRead").getValue(Boolean.class);
-                                user.setLastMessage(lastMessage);
-                                user.setReadStatus(isRead);
-                            }
+                adapter.notifyDataSetChanged();
+            }
 
-                            usersRef.child(user.getUserid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if (snapshot.exists()) {
-                                        String userName = snapshot.child("userName").getValue(String.class);
-                                        user.setUserName(userName);
 
-                                    }
-                                    adapter.notifyDataSetChanged();
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-                                    // Handle onCancelled if needed
-                                }
-                            });
-                        }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
@@ -91,23 +65,8 @@ public class ChatFragment extends Fragment {
                         }
                     });
 
-
+                  return binding.getRoot();
                 }
-                adapter.notifyDataSetChanged();
+
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Handle onCancelled if needed
-            }
-        });
-
-        return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
-}

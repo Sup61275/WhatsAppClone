@@ -5,27 +5,29 @@ public class User {
     private String userName;
     private String mail;
     private String password;
-    private String userid;
+    private String userId;
     private String lastMessage;
+
     private String status;
-    private boolean readStatus;
 
-    public User(String username, String email, boolean b, String userId) {
-        // Default constructor required for Firebase Realtime Database
-    }
-    public User() {
-        // Default constructor required for Firebase Realtime Database
+    public User(){
+
     }
 
-    public User(String profilePic, String userName, String mail, String password, String userid, String lastMessage, String status, boolean readStatus) {
+    public User(String profilePic, String userName, String mail, String password, String userId, String lastMessage, String status) {
         this.profilePic = profilePic;
         this.userName = userName;
         this.mail = mail;
         this.password = password;
-        this.userid = userid;
+        this.userId = userId;
         this.lastMessage = lastMessage;
         this.status = status;
-        this.readStatus = readStatus;
+    }
+
+    public User(String userName, String mail, String password) {
+        this.userName = userName;
+        this.mail = mail;
+        this.password = password;
     }
 
     public String getProfilePic() {
@@ -60,12 +62,12 @@ public class User {
         this.password = password;
     }
 
-    public String getUserid() {
-        return userid;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getLastMessage() {
@@ -83,15 +85,4 @@ public class User {
     public void setStatus(String status) {
         this.status = status;
     }
-
-    public boolean isReadStatus() {
-        return readStatus;
-    }
-
-    public void setReadStatus(boolean readStatus) {
-        this.readStatus = readStatus;
-    }
 }
-
-
-

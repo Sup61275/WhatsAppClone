@@ -19,14 +19,14 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private ActivityMainBinding binding;
-    private FirebaseAuth auth;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        auth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         // Set the custom toolbar as the action bar
         toolbar = findViewById(R.id.toolbar);
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu); // Use the menu.xml layout for the menu
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if (itemId == R.id.logout) {
             // Handle the "Logout" menu item click
-            auth.signOut();
+            mAuth.signOut();
             Intent intent = new Intent(MainActivity.this, SignInActivity.class);
             startActivity(intent);
             finish(); // Close the main activity

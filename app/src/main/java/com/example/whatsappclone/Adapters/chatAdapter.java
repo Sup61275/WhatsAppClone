@@ -39,11 +39,10 @@ public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
 
-    public chatAdapter(ArrayList<Message> messages, String recId, String senderId, String senderName) {
+    public chatAdapter(ArrayList<Message> messages, Context context, String recId) {
         this.messages = messages;
+        this.context = context;
         this.recId = recId;
-        this.senderId = senderId;
-        this.senderName = senderName;
     }
 
     public chatAdapter(ArrayList<Message> messages, Context context) {
@@ -65,7 +64,7 @@ public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        if (messages.get(position).getuId().equals(senderId)) {
+        if (messages.get(position).getuId().equals(FirebaseAuth.getInstance().getUid())) {
             return SENDER_VIEW_TYPE;
         } else {
             return RECEIVER_VIEW_TYPE;
@@ -78,45 +77,17 @@ public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Message message = messages.get(position);
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                new AlertDialog.Builder(context)
-                        .setTitle("Delete")
-                        .setMessage("Are you sure you want to delete this message permanently?")
-                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                FirebaseDatabase database= FirebaseDatabase.getInstance();
-                                String senderRoom=FirebaseAuth.getInstance().getUid()+recId;
-                                database.getReference().child("chats").child(senderRoom)
-                                        .child(message.getMessageId())
-                                        .setValue(null);
-                            }
-                        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                              dialog.dismiss();
-                            }
-                        }).show();
-                return false;
-            }
-        });
+        if (holder.getClass() == SenderViewHolder.class) {
+            ((SenderViewHolder) holder).senderMsg.setText(message.getMessage());
 
-        if (holder.getItemViewType() == SENDER_VIEW_TYPE) {
-            ((SenderViewHolder)holder).sendmssg.setText(message.getMessage());
-            Date date= new Date(message.getTimestamp());
-            SimpleDateFormat simpleDateFormat= new SimpleDateFormat("h:mm a");
-            String strDate = simpleDateFormat.format(date);
-            ((SenderViewHolder)holder).sendtime.setText(strDate.toString());
         } else {
-            ((ReceiverViewHolder)holder).recievemssg.setText(message.getMessage());
-            Date date= new Date(message.getTimestamp());
-            SimpleDateFormat simpleDateFormat= new SimpleDateFormat("h:mm a");
-            String strDate = simpleDateFormat.format(date);
-            ((ReceiverViewHolder)holder).recievetime.setText(strDate.toString());
+            ((ReceiverViewHolder) holder).receiverMsg.setText(message.getMessage());
+
         }
     }
+
+
+
 
 
     @Override
@@ -126,23 +97,23 @@ public class chatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public class ReceiverViewHolder extends RecyclerView.ViewHolder {
 
-        TextView recievemssg, recievetime;
+        TextView receiverMsg, receiverTime;
 
         public ReceiverViewHolder(@NonNull View itemView) {
             super(itemView);
-            recievemssg = itemView.findViewById(R.id.recieverText);
-            recievetime = itemView.findViewById(R.id.receiverTime);
+           receiverMsg = itemView.findViewById(R.id.recieverText);
+            receiverTime = itemView.findViewById(R.id.receiverTime);
         }
     }
 
     public class SenderViewHolder extends RecyclerView.ViewHolder {
 
-        TextView sendmssg, sendtime;
+        TextView senderMsg, senderTime;
 
         public SenderViewHolder(@NonNull View itemView) {
             super(itemView);
-            sendmssg = itemView.findViewById(R.id.senderText);
-            sendtime = itemView.findViewById(R.id.senderTime);
+           senderMsg = itemView.findViewById(R.id.senderText);
+            senderTime= itemView.findViewById(R.id.senderTime);
         }
     }
 }

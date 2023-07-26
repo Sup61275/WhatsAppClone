@@ -24,7 +24,7 @@ public class SignupActivity extends AppCompatActivity {
     private ActivitySignupBinding binding;
     private ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
-    private DatabaseReference usersRef;
+    FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,66 +37,50 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         mAuth = FirebaseAuth.getInstance();
-        usersRef = FirebaseDatabase.getInstance().getReference("Users");
 
-        progressDialog = new ProgressDialog(this);
+
+        progressDialog = new ProgressDialog(SignupActivity.this);
         progressDialog.setTitle("Creating Account");
         progressDialog.setMessage("We're creating your account");
 
-        binding.SignUpButton.setOnClickListener(new View.OnClickListener() {
+        binding.btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = binding.textusernamee.getText().toString().trim();
-                String email = binding.textemaill.getText().toString().trim();
-                String password = binding.textpasswordd.getText().toString().trim();
 
-                if (!username.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
+                if (!binding.txtUsername.getText().toString().isEmpty() && !binding.txtEmail.getText().toString().isEmpty() && !binding.txtPassword.getText().toString().isEmpty()) {
                     progressDialog.show();
 
-                    mAuth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
+                    mAuth.createUserWithEmailAndPassword(binding.txtEmail.getText().toString(), binding.txtPassword.getText().toString())
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     progressDialog.dismiss();
                                     if (task.isSuccessful()) {
-                                        String userId = mAuth.getCurrentUser().getUid();
-                                        String profilePic = ""; // Add the profile picture URL here
-                                        String lastMessage = ""; // Add the last message here
 
-                                        User user = new User(profilePic, username, email, password, userId, lastMessage, "", false);
+                                        User user = new User(binding.txtUsername.getText().toString(), binding.txtEmail.getText().toString(), binding.txtPassword.getText().toString());
+                                        String Id = task.getResult().getUser().getUid();
+                                        database.getReference().child("Users").child(Id).setValue(user);
+                                        Toast.makeText(SignupActivity.this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
 
-                                        usersRef.child(userId).setValue(user, new DatabaseReference.CompletionListener() {
-                                            @Override
-                                            public void onComplete(@NonNull DatabaseError error, @NonNull DatabaseReference ref) {
-                                                if (error == null) {
-                                                    Toast.makeText(SignupActivity.this, "Account created successfully", Toast.LENGTH_SHORT).show();
-                                                    Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-                                                    startActivity(intent);
-                                                    finish(); // Close the sign-up activity
-                                                } else {
-                                                    Toast.makeText(SignupActivity.this, "Failed to create account", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        });
                                     } else {
-                                        Toast.makeText(SignupActivity.this, "Failed to create account", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SignupActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
-                } else {
-                    Toast.makeText(SignupActivity.this, "Enter credentials", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
-        binding.txtalreadyhaveaccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SignupActivity.this, SignInActivity.class);
-                startActivity(intent);
+
+                    binding.txtAlreadyHaveAccount.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(SignupActivity.this, SignInActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                }
             }
         });
     }
 }
+
 
 
